@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xl
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: xl
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: xl
+    spec:
+      volumes:
+        - name: xl-data-volume
+          configMap:
+            name: xl-data
+      containers:
+        - name: xl-cli
+          image: bmoussaud/xl-cli:9.8.0
+          args:
+            - --xl-deploy-url
+            - http://d9c082f8bb54.ngrok.io
+            - --xl-deploy-username
+            - admin
+            - --xl-deploy-password
+            - admin
+            - apply
+            - -f
+            - /tmp/config/xl-deploy.yaml
+          volumeMounts:
+            - name: xl-data-volume
+              mountPath: /tmp/config
+          imagePullPolicy: Always
+

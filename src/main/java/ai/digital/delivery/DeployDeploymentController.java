@@ -24,6 +24,7 @@ public class DeployDeploymentController implements ResourceController<Deployment
     public UpdateControl<Deployment> createOrUpdateResource(Deployment deployment, Context<Deployment> context) {
         log.info("createOrUpdateResource() called with: customResource = [" + deployment + "], context = [" + context + "]");
         log.info(deployment.getSpec().getVersion() +" -> "+ deployment.getSpec().getEnvironment());
+        String[] command = new String[] {"rm", "/data/" + fileName};
         return UpdateControl.updateCustomResource(deployment);
     }
 
@@ -31,6 +32,12 @@ public class DeployDeploymentController implements ResourceController<Deployment
     public DeleteControl deleteResource(Deployment customResource, Context<Deployment> context) {
         log.info("deleteResource() called with: customResource = [" + customResource + "], context = [" + context + "]");
         return DeleteControl.DEFAULT_DELETE;
+    }
+
+    private void executeCommandInCurrentPod() {
+
+
+
     }
 
 }

@@ -1,0 +1,30 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: example-configmap
+  namespace: default
+data:
+  # Configuration values can be set as key-value properties
+  database: mongodb
+  database_uri: mongodb://localhost:27017
+
+  # Or set as complete file contents (even JSON!)
+  keys: |
+    image.public.key=771
+    rsa.public.key=42
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: xl-data
+  namespace: default
+data:
+  xl-deploy.yaml: |+
+    apiVersion: xl-deploy/v1
+    kind: Deployment
+    spec:
+      package: Applications/PetClinic-Ear/1.0.0
+      environment: Environments/Tomcat-Dev
+      onSuccessPolicy: ARCHIVE
+      orchestrators:
+        - sequential-by-deployed

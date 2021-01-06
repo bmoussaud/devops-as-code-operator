@@ -3,5 +3,5 @@ kind: Deployment
 metadata:
   name: benoit
 spec:
-  version: PetClinic-Ear/1.0
-  environment: Tomcat-Dev
+  version: Applications/PetClinic-Ear/1.0.0
+  environment: Environments/Tomcat-Dev

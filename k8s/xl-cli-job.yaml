@@ -1,0 +1,48 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: xl-data-configmap
+  namespace: default
+data:
+  xl-deploy.yaml: |+
+    apiVersion: xl-deploy/v1
+    kind: Deployment
+    spec:
+      package: Applications/PetClinic-Ear/1.0.0
+      environment: Environments/Tomcat-Dev
+      onSuccessPolicy: ARCHIVE
+      orchestrators:
+        - sequential-by-deployed
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: xl-cli-apply
+  namespace: default
+spec:
+  template:
+    spec:
+      volumes:
+        - name: xl-data-volume
+          configMap:
+            name: xl-data-configmap
+      containers:
+        - name: xl-cli
+          image: bmoussaud/xl-cli:9.8.0
+          args:
+            - --xl-deploy-url
+            - http://d9c082f8bb54.ngrok.io
+            - --xl-deploy-username
+            - admin
+            - --xl-deploy-password
+            - admin
+            - apply
+            - -f
+            - /tmp/config/xl-deploy.yaml
+          volumeMounts:
+            - name: xl-data-volume
+              mountPath: /tmp/config
+          imagePullPolicy: Always
+      restartPolicy: Never
+  backoffLimit: 4
