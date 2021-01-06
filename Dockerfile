@@ -1,13 +1,6 @@
-FROM maven:3.6.3-openjdk-11 as builder
+FROM openjdk:12-alpine
 
-WORKDIR /code
-COPY . /code
+ENTRYPOINT ["java", "-jar", "/usr/share/operator/operator.jar"]
 
-RUN mvn package
-
-FROM openjdk:11-slim
-
-WORKDIR /opt
-COPY --from=builder /code/target/myoperator.jar /opt
-
-CMD ["java", "-jar", "/opt/myoperator.jar"]
+ARG JAR_FILE
+ADD target/${JAR_FILE} /usr/share/operator/operator.jar

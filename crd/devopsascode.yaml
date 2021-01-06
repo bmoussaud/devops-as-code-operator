@@ -1,0 +1,7 @@
+apiVersion: deploy.digital.ai/v1
+kind: Deployment
+metadata:
+  name: benoit
+spec:
+  version: PetClinic-Ear/1.0
+  environment: Tomcat-Dev

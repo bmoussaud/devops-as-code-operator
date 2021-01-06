@@ -1,6 +1,6 @@
-package io.javaoperatorsdk.sample;
+package ai.digital.delivery;
 
-public class MyCustomResourceStatus {
+public class DeploymentStatus {
     private String status;
 
     public String getStatus() {
