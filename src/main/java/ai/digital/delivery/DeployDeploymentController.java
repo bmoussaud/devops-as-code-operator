@@ -41,8 +41,10 @@ public class DeployDeploymentController implements ResourceController<Deployment
     }
 
     private void triggerApplyJob() {
-
         final String namespace = "default";
+        String username = "admin";
+        String password = "admin";
+        String url = "http://d9c082f8bb54.ngrok.io";
         final Job job = new JobBuilder()
                 .withApiVersion("batch/v1")
                 .withNewMetadata()
@@ -56,7 +58,7 @@ public class DeployDeploymentController implements ResourceController<Deployment
                 .withNewSpec()
                 .addNewVolume().withName("xl-data-volume").withNewConfigMap().withName("xl-data-configmap").endConfigMap().endVolume()
                 .addNewContainer().withName("xl-cli").withImage("bmoussaud/xl-cli:9.8.0")
-                .withArgs("--xl-deploy-url", "http://d9c082f8bb54.ngrok.io", "--xl-deploy-username", "admin", "--xl-deploy-password", "admin", "apply", "-f", "/tmp/config/xl-deploy.yaml")
+                .withArgs("--xl-deploy-url", url, "--xl-deploy-username", username, "--xl-deploy-password", password, "apply", "-f", "/tmp/config/xl-deploy.yaml")
                 .addNewVolumeMount().withName("xl-data-volume").withMountPath("/tmp/config").endVolumeMount()
                 .withImagePullPolicy("Always")
                 .endContainer()
@@ -81,7 +83,7 @@ public class DeployDeploymentController implements ResourceController<Deployment
             log.info(joblog);
 
         } catch (InterruptedException e) {
-            log.warn("Thread interrupted!",e);
+            log.warn("Thread interrupted!", e);
             Thread.currentThread().interrupt();
         }
 

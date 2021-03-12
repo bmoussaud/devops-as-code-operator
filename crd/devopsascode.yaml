@@ -1,4 +1,4 @@
-apiVersion: deploy.digital.ai/v1
+apiVersion: katapulted.katapult.crd.com/v1alpha1
 kind: Deployment
 metadata:
   name: benoit
